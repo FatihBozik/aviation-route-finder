@@ -1,6 +1,20 @@
+server:
+  port: 8080
+
 spring:
   application:
     name: aviation-route-finder
+  liquibase:
+    change-log: classpath:/db/changelog/db.changelog-master.xml
+    database-change-log-lock-table: AVIATION_DB_CHANGELOG_LOCK
+    database-change-log-table: AVIATION_DB_CHANGE_LOG
+    enabled: true
   docker:
     compose:
-      enabled: false
+      lifecycle-management: start_and_stop
+      start:
+        command: up
+      stop:
+        command: down
+        timeout: 10s
+      file: docker-compose.yml
