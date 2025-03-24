@@ -1,0 +1,6 @@
+spring:
+  application:
+    name: aviation-route-finder
+  docker:
+    compose:
+      enabled: false
