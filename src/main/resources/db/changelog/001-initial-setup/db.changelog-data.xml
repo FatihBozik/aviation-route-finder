@@ -6,5 +6,98 @@
         http://www.liquibase.org/xml/ns/dbchangelog
         https://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.8.xsd">
 
+    <changeSet id="29-03-2025 14:00:02" author="Fatih Bozik">
+        <preConditions onFail="MARK_RAN">
+            <sqlCheck expectedResult="0">
+                SELECT COUNT(*)
+                FROM users
+            </sqlCheck>
+        </preConditions>
+        <sql>
+            INSERT INTO users(username, password, enabled)
+            SELECT 'admin', '{noop}admin', true;
+
+            INSERT INTO users(username, password, enabled)
+            SELECT 'beltur', '{noop}password', true;
+        </sql>
+    </changeSet>
+
+    <changeSet id="29-03-2025 14:30:02" author="Fatih Bozik">
+        <preConditions onFail="MARK_RAN">
+            <sqlCheck expectedResult="0">
+                SELECT COUNT(*)
+                FROM roles
+            </sqlCheck>
+        </preConditions>
+        <sql>
+            INSERT INTO roles (username, role)
+            SELECT 'admin', 'ROLE_ADMIN';
+
+            INSERT INTO roles (username, role)
+            SELECT 'beltur', 'ROLE_AGENCY';
+        </sql>
+    </changeSet>
+
+    <changeSet id="29-03-2025 14:07:02" author="Fatih Bozik">
+        <preConditions onFail="MARK_RAN">
+            <sqlCheck expectedResult="0">
+                SELECT COUNT(*)
+                FROM locations
+            </sqlCheck>
+        </preConditions>
+        <sql>
+            INSERT INTO locations (name, country, city, location_code)
+            VALUES ('Sabiha Gökçen Airport', 'Turkey', 'Istanbul', 'SAW'),
+                   ('Istanbul Airport', 'Turkey', 'Istanbul', 'IST'),
+                   ('Heathrow Airport', 'United Kingdom', 'London', 'LHR'),
+                   ('Taksim Square', 'Turkey', 'Istanbul', 'CCIST'),
+                   ('Wembley Stadium', 'United Kingdom', 'London', 'CCLON');
+        </sql>
+    </changeSet>
+
+    <changeSet id="29-03-2025 14:08:02" author="Fatih Bozik">
+        <preConditions onFail="MARK_RAN">
+            <sqlCheck expectedResult="0">
+                SELECT COUNT(*)
+                FROM transportations
+            </sqlCheck>
+        </preConditions>
+        <sql>
+            -- Taksim ➡ İstanbul Havalimanı (UBER)
+            INSERT INTO transportations (origin_location_id, destination_location_id, type, operating_days)
+            VALUES ((SELECT id FROM locations WHERE location_code = 'CCIST'),
+                    (SELECT id FROM locations WHERE location_code = 'IST'),
+                    'UBER',
+                    ARRAY[1, 2, 3, 4, 5, 6, 7]);
+
+            -- İstanbul Havalimanı ➡ Heathrow (FLIGHT)
+            INSERT INTO transportations (origin_location_id, destination_location_id, type, operating_days)
+            VALUES ((SELECT id FROM locations WHERE location_code = 'IST'),
+                    (SELECT id FROM locations WHERE location_code = 'LHR'),
+                    'FLIGHT',
+                    ARRAY[1, 2, 3, 4, 5]);
+
+            -- Heathrow ➡ Wembley (UBER)
+            INSERT INTO transportations (origin_location_id, destination_location_id, type, operating_days)
+            VALUES ((SELECT id FROM locations WHERE location_code = 'LHR'),
+                    (SELECT id FROM locations WHERE location_code = 'CCLON'),
+                    'UBER',
+                    ARRAY[1, 2, 3, 4, 5, 6, 7]);
+
+            -- Taksim ➡ SAW (BUS)
+            INSERT INTO transportations (origin_location_id, destination_location_id, type, operating_days)
+            VALUES ((SELECT id FROM locations WHERE location_code = 'CCIST'),
+                    (SELECT id FROM locations WHERE location_code = 'SAW'),
+                    'BUS',
+                    ARRAY[1, 2, 3, 4, 5]);
+
+            -- SAW ➡ Heathrow (FLIGHT)
+            INSERT INTO transportations (origin_location_id, destination_location_id, type, operating_days)
+            VALUES ((SELECT id FROM locations WHERE location_code = 'SAW'),
+                    (SELECT id FROM locations WHERE location_code = 'LHR'),
+                    'FLIGHT',
+                    ARRAY[1, 2, 3, 4, 5]);
+        </sql>
+    </changeSet>
 
 </databaseChangeLog>

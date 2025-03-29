@@ -9,6 +9,10 @@ spring:
     database-change-log-lock-table: AVIATION_DB_CHANGELOG_LOCK
     database-change-log-table: AVIATION_DB_CHANGE_LOG
     enabled: true
+  datasource:
+    url: ${POSTGRES_URL:jdbc:postgresql://localhost/aviation}
+    username: ${POSTGRES_USER:aviation}
+    password: ${POSTGRES_PASS:password}
   docker:
     compose:
       lifecycle-management: start_and_stop
