@@ -1,0 +1,106 @@
+openapi: 3.0.1
+info:
+  title: Aviation Route Finder API
+  description: API for managing locations, transportations, and finding possible routes.
+  license:
+    name: MIT
+    url: https://mit-license.org/
+  version: '1.0'
+servers:
+  - url: http://localhost:8080/api
+paths:
+  /locations:
+    get:
+      summary: Get all locations
+      operationId: getAllLocations
+      tags: [ Location ]
+      responses:
+        '200':
+          description: List of locations
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/LocationDto'
+
+  /transportations:
+    get:
+      summary: Get all transportations
+      operationId: getAllTransportations
+      tags: [ Transportation ]
+      responses:
+        '200':
+          description: List of transportations
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/TransportationDto'
+
+  /routes/{originCode}/{destinationCode}/{day}:
+    get:
+      summary: Get valid routes from origin to destination on a given day
+      operationId: getValidRoutes
+      tags: [ Route ]
+      parameters:
+        - name: originCode
+          in: path
+          required: true
+          schema:
+            type: string
+        - name: destinationCode
+          in: path
+          required: true
+          schema:
+            type: string
+        - name: day
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: List of valid routes
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RouteResponse'
+
+components:
+  schemas:
+    LocationDto:
+      type: object
+      properties:
+        name:
+          type: string
+        country:
+          type: string
+        city:
+          type: string
+        locationCode:
+          type: string
+
+    TransportationDto:
+      type: object
+      properties:
+        originCode:
+          type: string
+        destinationCode:
+          type: string
+        type:
+          type: string
+          enum: [ FLIGHT, BUS, SUBWAY, UBER ]
+        operatingDays:
+          type: array
+          items:
+            type: integer
+
+    RouteResponse:
+      type: object
+      properties:
+        steps:
+          type: array
+          items:
+            $ref: '#/components/schemas/TransportationDto'

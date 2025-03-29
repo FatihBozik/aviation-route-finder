@@ -22,3 +22,10 @@ spring:
         command: down
         timeout: 10s
       file: docker-compose.yml
+
+springdoc:
+  api-docs:
+    enabled: true
+  swagger-ui:
+    path: /swagger-ui.html
+    disable-swagger-default-url: false
