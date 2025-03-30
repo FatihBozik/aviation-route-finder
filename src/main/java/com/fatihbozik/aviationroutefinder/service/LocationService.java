@@ -1,13 +1,17 @@
 package com.fatihbozik.aviationroutefinder.service;
 
-import com.fatihbozik.aviationroutefinder.dto.Location;
+import com.fatihbozik.aviationroutefinder.domain.Location;
 
 import java.util.List;
 
 public interface LocationService {
-    List<Location> getAllLocations();
+    List<Location> getAll();
 
-    void createLocation(Location location);
+    Location create(Location location);
 
-    void deletePet(Location location);
+    void delete(Long locationId);
+
+    Location update(Long id, Location location);
+
+    Location get(Long id);
 }

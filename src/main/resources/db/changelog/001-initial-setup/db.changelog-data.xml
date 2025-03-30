@@ -46,7 +46,7 @@
             </sqlCheck>
         </preConditions>
         <sql>
-            INSERT INTO locations (name, country, city, location_code)
+            INSERT INTO locations (name, country, city, code)
             VALUES ('Sabiha Gökçen Airport', 'Turkey', 'Istanbul', 'SAW'),
                    ('Istanbul Airport', 'Turkey', 'Istanbul', 'IST'),
                    ('Heathrow Airport', 'United Kingdom', 'London', 'LHR'),
@@ -65,36 +65,36 @@
         <sql>
             -- Taksim ➡ İstanbul Havalimanı (UBER)
             INSERT INTO transportations (origin_location_id, destination_location_id, type, operating_days)
-            VALUES ((SELECT id FROM locations WHERE location_code = 'CCIST'),
-                    (SELECT id FROM locations WHERE location_code = 'IST'),
+            VALUES ((SELECT id FROM locations WHERE code = 'CCIST'),
+                    (SELECT id FROM locations WHERE code = 'IST'),
                     'UBER',
                     ARRAY[1, 2, 3, 4, 5, 6, 7]);
 
             -- İstanbul Havalimanı ➡ Heathrow (FLIGHT)
             INSERT INTO transportations (origin_location_id, destination_location_id, type, operating_days)
-            VALUES ((SELECT id FROM locations WHERE location_code = 'IST'),
-                    (SELECT id FROM locations WHERE location_code = 'LHR'),
+            VALUES ((SELECT id FROM locations WHERE code = 'IST'),
+                    (SELECT id FROM locations WHERE code = 'LHR'),
                     'FLIGHT',
                     ARRAY[1, 2, 3, 4, 5]);
 
             -- Heathrow ➡ Wembley (UBER)
             INSERT INTO transportations (origin_location_id, destination_location_id, type, operating_days)
-            VALUES ((SELECT id FROM locations WHERE location_code = 'LHR'),
-                    (SELECT id FROM locations WHERE location_code = 'CCLON'),
+            VALUES ((SELECT id FROM locations WHERE code = 'LHR'),
+                    (SELECT id FROM locations WHERE code = 'CCLON'),
                     'UBER',
                     ARRAY[1, 2, 3, 4, 5, 6, 7]);
 
             -- Taksim ➡ SAW (BUS)
             INSERT INTO transportations (origin_location_id, destination_location_id, type, operating_days)
-            VALUES ((SELECT id FROM locations WHERE location_code = 'CCIST'),
-                    (SELECT id FROM locations WHERE location_code = 'SAW'),
+            VALUES ((SELECT id FROM locations WHERE code = 'CCIST'),
+                    (SELECT id FROM locations WHERE code = 'SAW'),
                     'BUS',
                     ARRAY[1, 2, 3, 4, 5]);
 
             -- SAW ➡ Heathrow (FLIGHT)
             INSERT INTO transportations (origin_location_id, destination_location_id, type, operating_days)
-            VALUES ((SELECT id FROM locations WHERE location_code = 'SAW'),
-                    (SELECT id FROM locations WHERE location_code = 'LHR'),
+            VALUES ((SELECT id FROM locations WHERE code = 'SAW'),
+                    (SELECT id FROM locations WHERE code = 'LHR'),
                     'FLIGHT',
                     ARRAY[1, 2, 3, 4, 5]);
         </sql>

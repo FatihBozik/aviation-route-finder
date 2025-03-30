@@ -1,7 +1,7 @@
 package com.fatihbozik.aviationroutefinder.security;
 
 
-import com.fatihbozik.aviationroutefinder.model.UserEntity;
+import com.fatihbozik.aviationroutefinder.persistence.UserEntity;
 import com.fatihbozik.aviationroutefinder.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.userdetails.UserDetails;

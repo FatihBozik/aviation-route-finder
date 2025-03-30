@@ -1,4 +1,4 @@
-package com.fatihbozik.aviationroutefinder.model;
+package com.fatihbozik.aviationroutefinder.persistence;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -27,5 +27,5 @@ public class LocationEntity extends BaseEntity {
 
     @NotBlank
     @Column(nullable = false)
-    private String locationCode;
+    private String code;
 }

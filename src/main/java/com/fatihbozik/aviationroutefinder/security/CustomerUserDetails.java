@@ -1,6 +1,6 @@
 package com.fatihbozik.aviationroutefinder.security;
 
-import com.fatihbozik.aviationroutefinder.model.UserEntity;
+import com.fatihbozik.aviationroutefinder.persistence.UserEntity;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;

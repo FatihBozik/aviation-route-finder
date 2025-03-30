@@ -8,12 +8,19 @@ info:
   version: '1.0'
 servers:
   - url: http://localhost:8080/api
+tags:
+  - name: Locations
+    description: Endpoints for managing locations.
+  - name: Transportations
+    description: Endpoints for managing transportations.
+  - name: Routes
+    description: Endpoints for finding valid routes.
 paths:
   /locations:
     get:
       summary: Get all locations
       operationId: getAllLocations
-      tags: [ Location ]
+      tags: [ Locations ]
       responses:
         '200':
           description: List of locations
@@ -22,13 +29,88 @@ paths:
               schema:
                 type: array
                 items:
-                  $ref: '#/components/schemas/LocationDto'
+                  $ref: '#/components/schemas/LocationResponse'
+    post:
+      summary: Create a new location
+      operationId: createLocation
+      tags: [ Locations ]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/LocationRequest'
+      responses:
+        '200':
+          description: Created location
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/LocationResponse'
+  /locations/{id}:
+    get:
+      summary: Get location by ID
+      operationId: getLocation
+      tags: [ Locations ]
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '200':
+          description: Location found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/LocationResponse'
+    put:
+      summary: Update location by ID
+      operationId: updateLocation
+      tags: [ Locations ]
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int64
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/LocationRequest'
+      responses:
+        '200':
+          description: Location updated
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/LocationResponse'
+    delete:
+      summary: Delete location by ID
+      operationId: deleteLocation
+      tags: [ Locations ]
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '200':
+          description: Location deleted
+
 
   /transportations:
     get:
       summary: Get all transportations
       operationId: getAllTransportations
-      tags: [ Transportation ]
+      tags: [ Transportations ]
       responses:
         '200':
           description: List of transportations
@@ -37,13 +119,90 @@ paths:
               schema:
                 type: array
                 items:
-                  $ref: '#/components/schemas/TransportationDto'
+                  $ref: '#/components/schemas/TransportationResponse'
+    post:
+      summary: Create a new transportation
+      operationId: createTransportation
+      tags: [ Transportations ]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TransportationRequest'
+      responses:
+        '200':
+          description: Created transportation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TransportationResponse'
+
+  /transportations/{id}:
+    get:
+      summary: Get transportation by ID
+      operationId: getTransportationById
+      tags: [ Transportations ]
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '200':
+          description: Transportation by ID
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TransportationResponse'
+
+    put:
+      summary: Update transportation by ID
+      operationId: updateTransportation
+      tags: [ Transportations ]
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int64
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TransportationRequest'
+      responses:
+        '200':
+          description: Updated transportation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TransportationResponse'
+
+    delete:
+      summary: Delete transportation by ID
+      operationId: deleteTransportation
+      tags: [ Transportations ]
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '200':
+          description: Transportation deleted
 
   /routes/{originCode}/{destinationCode}/{day}:
     get:
       summary: Get valid routes from origin to destination on a given day
       operationId: getValidRoutes
-      tags: [ Route ]
+      tags: [ Routes ]
       parameters:
         - name: originCode
           in: path
@@ -70,25 +229,83 @@ paths:
 
 components:
   schemas:
-    LocationDto:
+    LocationRequest:
       type: object
+      required: [ name, country, city, code ]
       properties:
         name:
           type: string
+          minLength: 2
+          maxLength: 100
+          example: "Amsterdam Schiphol Airport"
         country:
           type: string
+          minLength: 2
+          maxLength: 100
+          example: "Netherlands"
         city:
           type: string
-        locationCode:
+          minLength: 2
+          maxLength: 100
+          example: "Amsterdam"
+        code:
           type: string
+          minLength: 2
+          maxLength: 10
+          pattern: '^[A-Z0-9]{2,10}$'
+          example: "AMS"
 
-    TransportationDto:
+    LocationResponse:
       type: object
       properties:
-        originCode:
+        id:
+          type: integer
+          format: int64
+          example: 1
+        name:
           type: string
-        destinationCode:
+          example: Sabiha Gökçen Airport
+        country:
           type: string
+          example: Turkey
+        city:
+          type: string
+          example: Istanbul
+        code:
+          type: string
+          example: SAW
+
+    TransportationRequest:
+      type: object
+      required: [ originId, destinationId, type, operatingDays ]
+      properties:
+        originId:
+          type: integer
+          format: int64
+          example: 1
+        destinationId:
+          type: integer
+          format: int64
+          example: 2
+        type:
+          type: string
+          enum: [ FLIGHT, BUS, SUBWAY, UBER ]
+          example: "FLIGHT"
+        operatingDays:
+          type: array
+          items:
+            type: integer
+          example: [ 1, 3, 5 ]
+
+    TransportationResponse:
+      type: object
+      properties:
+        originId:
+          type: integer
+          format: int64
+        destinationId:
+          type: integer
+          format: int64
         type:
           type: string
           enum: [ FLIGHT, BUS, SUBWAY, UBER ]
@@ -103,4 +320,4 @@ components:
         steps:
           type: array
           items:
-            $ref: '#/components/schemas/TransportationDto'
+            $ref: '#/components/schemas/TransportationResponse'

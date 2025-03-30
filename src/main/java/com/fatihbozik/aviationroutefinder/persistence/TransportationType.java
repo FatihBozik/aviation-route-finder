@@ -1,4 +1,4 @@
-package com.fatihbozik.aviationroutefinder.model;
+package com.fatihbozik.aviationroutefinder.persistence;
 
 public enum TransportationType {
     FLIGHT, BUS, SUBWAY, UBER

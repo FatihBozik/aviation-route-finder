@@ -1,4 +1,4 @@
-package com.fatihbozik.aviationroutefinder.model;
+package com.fatihbozik.aviationroutefinder.persistence;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;

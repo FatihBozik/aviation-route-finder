@@ -1,6 +1,6 @@
 package com.fatihbozik.aviationroutefinder.repository;
 
-import com.fatihbozik.aviationroutefinder.model.UserEntity;
+import com.fatihbozik.aviationroutefinder.persistence.UserEntity;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

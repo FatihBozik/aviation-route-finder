@@ -1,4 +1,4 @@
-package com.fatihbozik.aviationroutefinder.model;
+package com.fatihbozik.aviationroutefinder.persistence;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
@@ -29,7 +29,7 @@ public class UserEntity {
 
     @JsonIgnore
     public void addRole(String roleName) {
-        if(this.roles == null) {
+        if (this.roles == null) {
             this.roles = new HashSet<>();
         }
         RoleEntity roleEntity = new RoleEntity();

@@ -1,4 +1,4 @@
-package com.fatihbozik.aviationroutefinder.model;
+package com.fatihbozik.aviationroutefinder.persistence;
 
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
