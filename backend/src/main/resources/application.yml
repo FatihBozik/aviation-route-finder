@@ -2,6 +2,8 @@ server:
   port: 8080
 
 spring:
+  profiles:
+    active: dev
   application:
     name: "Aviation Route Finder"
   liquibase:
@@ -15,6 +17,7 @@ spring:
     password: ${POSTGRES_PASS:password}
   docker:
     compose:
+      enabled: true
       lifecycle-management: start_and_stop
       start:
         command: up
