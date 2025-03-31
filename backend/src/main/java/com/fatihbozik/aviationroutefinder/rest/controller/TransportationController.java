@@ -51,7 +51,7 @@ public class TransportationController {
 
     @PutMapping("{id}")
     @PreAuthorize("hasAnyRole(@roles.ADMIN)")
-    public TransportationResponse updateTransportation(@PathVariable("id") Long transportationId, TransportationRequest request) {
+    public TransportationResponse updateTransportation(@PathVariable("id") Long transportationId, @RequestBody TransportationRequest request) {
         final Transportation transportation = transportationMapper.toDomain(request);
         final Transportation updatedTransportation = transportationService.update(transportationId, transportation);
         return transportationMapper.toResponse(updatedTransportation);

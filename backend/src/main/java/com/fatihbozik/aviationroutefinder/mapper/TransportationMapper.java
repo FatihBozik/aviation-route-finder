@@ -19,6 +19,7 @@ public interface TransportationMapper {
     @Mapping(source = "destinationId", target = "destination.id")
     Transportation toDomain(TransportationRequest request);
 
+
     @Mapping(source = "origin.id", target = "originId")
     @Mapping(source = "destination.id", target = "destinationId")
     TransportationResponse toResponse(Transportation transportation);

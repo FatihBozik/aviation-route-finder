@@ -1,0 +1,144 @@
+.App {
+    text-align: center;
+}
+
+.App-logo {
+    height: 40vmin;
+    pointer-events: none;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+    .App-logo {
+        animation: App-logo-spin infinite 20s linear;
+    }
+}
+
+.App-header {
+    background-color: #282c34;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    font-size: calc(10px + 2vmin);
+    color: white;
+}
+
+.App-link {
+    color: #61dafb;
+}
+
+@keyframes App-logo-spin {
+    from {
+        transform: rotate(0deg);
+    }
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+/* Dashboard Layout */
+.dashboard-container {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
+
+.sidebar {
+    min-height: calc(100vh - 56px);
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    padding-top: 1rem;
+}
+
+.sidebar-link {
+    padding: 0.75rem 1rem;
+    border-radius: 0.25rem;
+    margin-bottom: 0.5rem;
+    display: flex;
+    align-items: center;
+}
+
+.sidebar-link.active {
+    background-color: rgba(13, 110, 253, 0.1);
+    color: #0d6efd;
+    font-weight: 500;
+}
+
+.main-content {
+    padding: 1.5rem;
+    background-color: #f8f9fa;
+    min-height: calc(100vh - 56px);
+}
+
+/* Route Search */
+.route-search-container {
+    margin-bottom: 2rem;
+}
+
+/* Route Details */
+.route-details {
+    position: sticky;
+    top: 1rem;
+}
+
+/* Transportation Types */
+.transportation-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.5rem 0.75rem;
+    border-radius: 0.25rem;
+    font-weight: 500;
+    margin-right: 0.5rem;
+    margin-bottom: 0.5rem;
+}
+
+.transportation-badge.flight {
+    background-color: #cfe2ff;
+    color: #084298;
+}
+
+.transportation-badge.bus {
+    background-color: #d1e7dd;
+    color: #0f5132;
+}
+
+.transportation-badge.subway {
+    background-color: #cff4fc;
+    color: #055160;
+}
+
+.transportation-badge.uber {
+    background-color: #fff3cd;
+    color: #664d03;
+}
+
+/* Form Controls */
+.form-label {
+    font-weight: 500;
+}
+
+/* Tables */
+.table {
+    margin-bottom: 0;
+}
+
+.table > :not(caption) > * > * {
+    padding: 0.75rem 1rem;
+}
+
+/* Utility classes */
+.cursor-pointer {
+    cursor: pointer;
+}
+
+/* Route Visualization */
+.route-visualization {
+    height: 250px;
+    background-color: #e9ecef;
+    border-radius: 0.25rem;
+    margin-bottom: 1rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}

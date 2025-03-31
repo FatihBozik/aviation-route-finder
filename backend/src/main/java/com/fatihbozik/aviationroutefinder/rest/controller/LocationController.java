@@ -43,7 +43,7 @@ public class LocationController {
 
     @PutMapping("{id}")
     @PreAuthorize("hasAnyRole(@roles.ADMIN)")
-    public LocationResponse updateLocation(@PathVariable("id") Long locationId, LocationRequest request) {
+    public LocationResponse updateLocation(@PathVariable("id") Long locationId, @RequestBody LocationRequest request) {
         Location location = locationMapper.toDomain(request);
         Location updatedLocation = locationService.update(locationId, location);
         return locationMapper.toResponse(updatedLocation);
