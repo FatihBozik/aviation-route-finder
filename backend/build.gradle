@@ -69,12 +69,11 @@ openApiGenerate {
     modelPackage = "com.fatihbozik.aviationroutefinder.rest.model"
 
     configOptions = [
-            dateLibrary            : "java8",
-            performBeanValidation  : "true",
-            interfaceOnly          : "true",
-            useTags                : "true",
-            useSpringBoot3         : "true",
-            "documentationProvider": "springdoc"
+            dateLibrary          : "java8",
+            performBeanValidation: "true",
+            interfaceOnly        : "true",
+            useTags              : "true",
+            useSpringBoot3       : "true"
     ]
 }
 
@@ -84,6 +83,12 @@ sourceSets {
             srcDir "$buildDir/generated/src/main/java"
         }
     }
+}
+
+test {
+    jvmArgs += [
+            "-javaagent:${classpath.find { it.name.contains('byte-buddy-agent') }.absolutePath}"
+    ]
 }
 
 compileJava.dependsOn tasks.openApiGenerate
