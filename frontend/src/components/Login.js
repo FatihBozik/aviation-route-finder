@@ -33,8 +33,8 @@ const Login = () => {
                     <Card>
                         <Card.Header as="h4" className="text-center">
                             <img
-                                src="/thy-logo.png"
-                                alt="THY Logo"
+                                src="/logo.png"
+                                alt="Logo"
                                 height="40"
                                 className="me-2"
                             />

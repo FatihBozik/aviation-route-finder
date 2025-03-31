@@ -22,8 +22,8 @@ const Dashboard = () => {
                 <Container fluid>
                     <Navbar.Brand href="/">
                         <img
-                            src="/thy-logo.png"
-                            alt="THY Logo"
+                            src="/logo.png"
+                            alt="Logo"
                             height="30"
                             className="d-inline-block align-top me-2"
                         />

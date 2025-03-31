@@ -35,6 +35,9 @@ const RouteSearch = () => {
         date: formatDate(new Date())
     };
 
+    const yesterday = new Date();
+    yesterday.setDate(yesterday.getDate() - 1);
+
     const validationSchema = Yup.object().shape({
         originCode: Yup.string().required('Origin location is required'),
         destinationCode: Yup.string()
@@ -46,7 +49,7 @@ const RouteSearch = () => {
             ),
         date: Yup.date()
             .required('Date is required')
-            .min(new Date(), 'Date cannot be in the past')
+            .min(yesterday, 'Date cannot be in the past')
     });
 
     const handleSearch = (values, {setSubmitting}) => {

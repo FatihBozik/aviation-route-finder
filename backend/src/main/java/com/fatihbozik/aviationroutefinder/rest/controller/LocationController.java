@@ -20,7 +20,7 @@ public class LocationController {
     private final LocationMapper locationMapper;
 
     @GetMapping
-    @PreAuthorize("hasAnyRole(@roles.ADMIN)")
+    @PreAuthorize("hasAnyRole(@roles.ADMIN, @roles.AGENCY)")
     public List<LocationResponse> getAllLocations() {
         final List<Location> allLocations = locationService.getAll();
         return locationMapper.toResponses(allLocations);
