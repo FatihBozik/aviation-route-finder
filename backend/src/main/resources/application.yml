@@ -3,7 +3,7 @@ server:
 
 spring:
   application:
-    name: aviation-route-finder
+    name: "Aviation Route Finder"
   liquibase:
     change-log: classpath:/db/changelog/db.changelog-master.xml
     database-change-log-lock-table: AVIATION_DB_CHANGELOG_LOCK

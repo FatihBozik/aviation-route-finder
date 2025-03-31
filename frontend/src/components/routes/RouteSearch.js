@@ -30,18 +30,18 @@ const RouteSearch = () => {
     }, []);
 
     const initialValues = {
-        originLocation: '',
-        destinationLocation: '',
+        originCode: null,
+        destinationCode: null,
         date: formatDate(new Date())
     };
 
     const validationSchema = Yup.object().shape({
-        originLocation: Yup.string().required('Origin location is required'),
-        destinationLocation: Yup.string()
+        originCode: Yup.string().required('Origin location is required'),
+        destinationCode: Yup.string()
             .required('Destination location is required')
             .test('different-locations', 'Origin and destination must be different',
-                function(value) {
-                    return value !== this.parent.originLocation;
+                function (value) {
+                    return value !== this.parent.originCode;
                 }
             ),
         date: Yup.date()
@@ -49,15 +49,28 @@ const RouteSearch = () => {
             .min(new Date(), 'Date cannot be in the past')
     });
 
-    const handleSearch = (values, { setSubmitting }) => {
+    const handleSearch = (values, {setSubmitting}) => {
         setError('');
         setSearching(true);
         setSelectedRoute(null);
         setRoutes([]);
 
-        RouteService.findRoutes(values.originLocation, values.destinationLocation, values.date)
+        RouteService.findRoutes(values.originCode, values.destinationCode, values.date)
             .then(response => {
-                setRoutes(response.data);
+                const formattedRoutes = response.data.map(transportationList => {
+                    if (transportationList.length === 0) return null;
+
+                    const firstTransport = transportationList[0];
+                    const lastTransport = transportationList[transportationList.length - 1];
+
+                    return {
+                        origin: firstTransport.originId,
+                        destination: lastTransport.destinationId,
+                        transportations: transportationList
+                    };
+                }).filter(route => route !== null);
+
+                setRoutes(formattedRoutes);
                 setSearching(false);
                 setSubmitting(false);
             })
@@ -128,21 +141,21 @@ const RouteSearch = () => {
                                                     <Form.Group className="mb-3">
                                                         <Form.Label>From</Form.Label>
                                                         <Form.Select
-                                                            name="originLocation"
-                                                            value={values.originLocation}
+                                                            name="originCode"
+                                                            value={values.originCode}
                                                             onChange={handleChange}
                                                             onBlur={handleBlur}
-                                                            isInvalid={touched.originLocation && !!errors.originLocation}
+                                                            isInvalid={touched.originCode && !!errors.originCode}
                                                         >
                                                             <option value="">Select Origin</option>
                                                             {locations.map(location => (
-                                                                <option key={location.id} value={location.id}>
+                                                                <option key={location.id} value={location.code}>
                                                                     {location.name} ({location.code}) - {location.city}
                                                                 </option>
                                                             ))}
                                                         </Form.Select>
                                                         <Form.Control.Feedback type="invalid">
-                                                            {errors.originLocation}
+                                                            {errors.originCode}
                                                         </Form.Control.Feedback>
                                                     </Form.Group>
                                                 </Col>
@@ -151,21 +164,21 @@ const RouteSearch = () => {
                                                     <Form.Group className="mb-3">
                                                         <Form.Label>To</Form.Label>
                                                         <Form.Select
-                                                            name="destinationLocation"
-                                                            value={values.destinationLocation}
+                                                            name="destinationCode"
+                                                            value={values.destinationCode}
                                                             onChange={handleChange}
                                                             onBlur={handleBlur}
-                                                            isInvalid={touched.destinationLocation && !!errors.destinationLocation}
+                                                            isInvalid={touched.destinationCode && !!errors.destinationCode}
                                                         >
                                                             <option value="">Select Destination</option>
                                                             {locations.map(location => (
-                                                                <option key={location.id} value={location.id}>
+                                                                <option key={location.id} value={location.code}>
                                                                     {location.name} ({location.code}) - {location.city}
                                                                 </option>
                                                             ))}
                                                         </Form.Select>
                                                         <Form.Control.Feedback type="invalid">
-                                                            {errors.destinationLocation}
+                                                            {errors.destinationCode}
                                                         </Form.Control.Feedback>
                                                     </Form.Group>
                                                 </Col>

@@ -2,7 +2,9 @@ package com.fatihbozik.aviationroutefinder.service;
 
 import com.fatihbozik.aviationroutefinder.domain.Transportation;
 import com.fatihbozik.aviationroutefinder.mapper.TransportationMapper;
+import com.fatihbozik.aviationroutefinder.persistence.LocationEntity;
 import com.fatihbozik.aviationroutefinder.persistence.TransportationEntity;
+import com.fatihbozik.aviationroutefinder.repository.LocationRepository;
 import com.fatihbozik.aviationroutefinder.repository.TransportationRepository;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
@@ -14,8 +16,9 @@ import java.util.List;
 @Service
 @RequiredArgsConstructor
 public class TransportationServiceImpl implements TransportationService {
-    private final TransportationRepository transportationRepository;
+    private final LocationRepository locationRepository;
     private final TransportationMapper transportationMapper;
+    private final TransportationRepository transportationRepository;
 
     @Override
     @Transactional(readOnly = true)
@@ -34,17 +37,6 @@ public class TransportationServiceImpl implements TransportationService {
 
     @Override
     @Transactional(readOnly = true)
-    public List<Transportation> getTransportationsByDay(Integer locationId, int day) {
-        // TODO: Implement this method
-//        return transportationRepository.findByOriginAndOperatingDaysContaining(null, day)
-//                .stream()
-//                .map(transportationMapper::toDomain)
-//                .collect(Collectors.toList());
-        return List.of();
-    }
-
-    @Override
-    @Transactional(readOnly = true)
     public Transportation get(Long id) {
         return transportationRepository.findById(id)
                 .map(transportationMapper::toDomain)
@@ -54,9 +46,8 @@ public class TransportationServiceImpl implements TransportationService {
     @Override
     @Transactional
     public Transportation update(Long id, Transportation newTransportation) {
-        final TransportationEntity entity = transportationRepository.findById(id)
-                .orElseThrow(() -> new EntityNotFoundException("Transportation not found with id: " + id));
-        transportationMapper.updateEntity(newTransportation, entity);
+        final TransportationEntity entity = getTransportation(id);
+        patchEntity(newTransportation, entity);
         final TransportationEntity saved = transportationRepository.save(entity);
         return transportationMapper.toDomain(saved);
     }
@@ -68,5 +59,26 @@ public class TransportationServiceImpl implements TransportationService {
             throw new EntityNotFoundException("Transportation not found with id: " + transportationId);
         }
         transportationRepository.deleteById(transportationId);
+    }
+
+    private void patchEntity(Transportation newTransportation, TransportationEntity entity) {
+        final LocationEntity originEntity = getLocation(newTransportation.origin().id());
+        entity.setOrigin(originEntity);
+
+        final LocationEntity destinationEntity = getLocation(newTransportation.destination().id());
+        entity.setDestination(destinationEntity);
+
+        entity.setType(newTransportation.type());
+        entity.setOperatingDays(newTransportation.operatingDays());
+    }
+
+    private LocationEntity getLocation(Long id) {
+        return locationRepository.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException("Location not found with id: " + id));
+    }
+
+    private TransportationEntity getTransportation(Long id) {
+        return transportationRepository.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException("Transportation not found with id: " + id));
     }
 }

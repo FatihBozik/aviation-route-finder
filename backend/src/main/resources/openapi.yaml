@@ -198,7 +198,7 @@ paths:
         '200':
           description: Transportation deleted
 
-  /routes/{originCode}/{destinationCode}/{day}:
+  /routes/{originCode}/{destinationCode}/{date}:
     get:
       summary: Get valid routes from origin to destination on a given day
       operationId: getValidRoutes
@@ -216,12 +216,14 @@ paths:
           schema:
             type: string
             example: "SAW"
-        - name: day
+        - name: date
           in: path
           required: true
           schema:
-            type: integer
-            example: 2
+            type: string
+            format: date
+            example: "2025-04-15"
+          description: Date in ISO format (YYYY-MM-DD)
       responses:
         '200':
           description: List of valid routes
@@ -307,6 +309,10 @@ components:
     TransportationResponse:
       type: object
       properties:
+        id:
+          type: integer
+          format: int64
+          example: 1
         originId:
           type: integer
           format: int64

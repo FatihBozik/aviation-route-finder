@@ -26,14 +26,6 @@ public class TransportationController {
         return transportationMapper.toResponses(allTransportations);
     }
 
-    @PreAuthorize("hasAnyRole(@roles.ADMIN)")
-    @GetMapping("/{originId}/{day}")
-    public List<Transportation> getTransportations(
-            @PathVariable Integer originId,
-            @PathVariable int day) {
-        return transportationService.getTransportationsByDay(originId, day);
-    }
-
     @PostMapping
     @PreAuthorize("hasAnyRole(@roles.ADMIN)")
     public TransportationResponse createTransportation(@RequestBody @Valid TransportationRequest request) {

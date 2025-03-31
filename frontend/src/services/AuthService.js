@@ -11,15 +11,6 @@ class AuthService {
         // Set the Authorization header for all future requests
         axios.defaults.headers.common['Authorization'] = `Basic ${token}`;
 
-        // Store the token and user info in local storage
-        localStorage.setItem('user', JSON.stringify({
-            username,
-            token,
-            // For the purpose of this demo, we'll hardcode the role based on username
-            // In a real application, you would get this from the backend
-            role: username.includes('admin') ? 'ADMIN' : 'AGENCY'
-        }));
-
         return axios.get(`${API_URL}/users/me`)
             .then(response => {
                 // Store user information in local storage
@@ -72,5 +63,18 @@ class AuthService {
         }
     }
 }
+
+axios.interceptors.request.use(
+    config => {
+        const user = JSON.parse(localStorage.getItem('user'));
+        if (user && user.token) {
+            config.headers['Authorization'] = `Basic ${user.token}`;
+        }
+        return config;
+    },
+    error => {
+        return Promise.reject(error);
+    }
+);
 
 export default new AuthService();

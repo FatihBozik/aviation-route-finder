@@ -2,6 +2,7 @@ package com.fatihbozik.aviationroutefinder.rest.advice;
 
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.servlet.http.HttpServletRequest;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ProblemDetail;
@@ -20,21 +21,23 @@ import java.time.Instant;
  * <p>
  * This class handles exceptions thrown by REST controllers and returns appropriate HTTP responses to the client.
  */
+@Slf4j
 @RestControllerAdvice
 public class ExceptionControllerAdvice {
 
     /**
      * Handles all general exceptions by returning a 500 Internal Server Error status with error details.
      *
-     * @param e       The {@link Exception} to be handled
+     * @param ex      The {@link Exception} to be handled
      * @param request {@link HttpServletRequest} object referring to the current request.
      * @return A {@link ResponseEntity} containing the error information and a 500 Internal Server Error status
      */
     @ExceptionHandler(Exception.class)
     @ResponseBody
-    public ResponseEntity<ProblemDetail> handleGeneralException(Exception e, HttpServletRequest request) {
+    public ResponseEntity<ProblemDetail> handleGeneralException(Exception ex, HttpServletRequest request) {
+        LOG.error("Error::{}", ex.getMessage(), ex);
         HttpStatus status = HttpStatus.INTERNAL_SERVER_ERROR;
-        ProblemDetail detail = this.detailBuild(e, status, request.getRequestURL());
+        ProblemDetail detail = this.detailBuild(ex, status, request.getRequestURL());
         return ResponseEntity.status(status).body(detail);
     }
 
@@ -49,6 +52,7 @@ public class ExceptionControllerAdvice {
     @ExceptionHandler(DataIntegrityViolationException.class)
     @ResponseBody
     public ResponseEntity<ProblemDetail> handleDataIntegrityViolationException(DataIntegrityViolationException ex, HttpServletRequest request) {
+        LOG.error("Error::{}", ex.getMessage(), ex);
         HttpStatus status = HttpStatus.NOT_FOUND;
         ProblemDetail detail = this.detailBuild(ex, status, request.getRequestURL());
         return ResponseEntity.status(status).body(detail);
@@ -64,6 +68,7 @@ public class ExceptionControllerAdvice {
     @ExceptionHandler(EntityNotFoundException.class)
     @ResponseBody
     public ResponseEntity<ProblemDetail> handleEntityNotFound(EntityNotFoundException ex, HttpServletRequest request) {
+        LOG.error("Error::{}", ex.getMessage(), ex);
         HttpStatus status = HttpStatus.NOT_FOUND;
         ProblemDetail detail = this.detailBuild(ex, status, request.getRequestURL());
         return ResponseEntity.status(status).body(detail);
@@ -79,6 +84,7 @@ public class ExceptionControllerAdvice {
     @ExceptionHandler(MethodArgumentNotValidException.class)
     @ResponseBody
     public ResponseEntity<ProblemDetail> handleMethodArgumentNotValidException(MethodArgumentNotValidException ex, HttpServletRequest request) {
+        LOG.error("Error::{}", ex.getMessage(), ex);
         HttpStatus status = HttpStatus.BAD_REQUEST;
         BindingErrorsResponse errors = new BindingErrorsResponse();
         BindingResult bindingResult = ex.getBindingResult();

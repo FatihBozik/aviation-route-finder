@@ -9,8 +9,6 @@ public interface TransportationService {
 
     Transportation create(Transportation transportation);
 
-    List<Transportation> getTransportationsByDay(Integer originId, int day);
-
     Transportation get(Long transportationId);
 
     Transportation update(Long transportationId, Transportation transportation);

@@ -158,7 +158,7 @@ const TransportationForm = () => {
                             <Form.Group className="mb-3">
                                 <Form.Label>Origin Location</Form.Label>
                                 <Form.Select
-                                    name="originLocation"
+                                    name="originId"
                                     value={values.originId}
                                     onChange={handleChange}
                                     onBlur={handleBlur}
@@ -179,11 +179,11 @@ const TransportationForm = () => {
                             <Form.Group className="mb-3">
                                 <Form.Label>Destination Location</Form.Label>
                                 <Form.Select
-                                    name="destinationLocation"
-                                    value={values.destionationId}
+                                    name="destinationId"
+                                    value={values.destinationId}
                                     onChange={handleChange}
                                     onBlur={handleBlur}
-                                    isInvalid={touched.destionationId && !!errors.destionationId}
+                                    isInvalid={touched.destinationId && !!errors.destinationId}
                                 >
                                     <option value="">Select Destination Location</option>
                                     {locations.map(location => (
@@ -193,14 +193,14 @@ const TransportationForm = () => {
                                     ))}
                                 </Form.Select>
                                 <Form.Control.Feedback type="invalid">
-                                    {errors.destionationId}
+                                    {errors.destinationId}
                                 </Form.Control.Feedback>
                             </Form.Group>
 
                             <Form.Group className="mb-3">
                                 <Form.Label>Transportation Type</Form.Label>
                                 <Form.Select
-                                    name="transportationType"
+                                    name="type"
                                     value={values.type}
                                     onChange={handleChange}
                                     onBlur={handleBlur}

@@ -82,7 +82,7 @@ const RouteResults = ({ routes, locations, onRouteSelect, selectedRoute }) => {
                             <td>
                                 {route.transportations.map((transport, idx) => (
                                     <div key={idx} className="mb-1">
-                                        {getTransportationBadge(transport.transportationType)}
+                                        {getTransportationBadge(transport.type)}
                                     </div>
                                 ))}
                             </td>

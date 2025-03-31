@@ -5,8 +5,11 @@ import io.swagger.v3.oas.models.OpenAPI;
 import io.swagger.v3.oas.models.info.Contact;
 import io.swagger.v3.oas.models.info.Info;
 import io.swagger.v3.oas.models.info.License;
+import jakarta.annotation.PostConstruct;
+import org.springdoc.core.utils.SpringDocUtils;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.ResponseEntity;
 
 import java.util.Collections;
 
@@ -31,18 +34,18 @@ public class SwaggerConfig {
     }
 
     private Contact swaggerContact() {
-        Contact petclinicContact = new Contact();
-        petclinicContact.setName("Fatih Bozik");
-        petclinicContact.setUrl("https://github.com/FatihBozik/aviation-route-finder");
-        return petclinicContact;
+        Contact aviationRouteFinderContact = new Contact();
+        aviationRouteFinderContact.setName("Fatih Bozik");
+        aviationRouteFinderContact.setUrl("https://github.com/FatihBozik/aviation-route-finder");
+        return aviationRouteFinderContact;
     }
 
     private License swaggerLicense() {
-        License petClinicLicense = new License();
-        petClinicLicense.setName("MIT");
-        petClinicLicense.setUrl("https://mit-license.org/");
-        petClinicLicense.setExtensions(Collections.emptyMap());
-        return petClinicLicense;
+        License aviationRouteFinderLicense = new License();
+        aviationRouteFinderLicense.setName("MIT");
+        aviationRouteFinderLicense.setUrl("https://mit-license.org/");
+        aviationRouteFinderLicense.setExtensions(Collections.emptyMap());
+        return aviationRouteFinderLicense;
     }
 
 }
