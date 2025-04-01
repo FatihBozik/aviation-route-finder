@@ -2,7 +2,7 @@ FROM eclipse-temurin:21-jdk-alpine as builder
 WORKDIR application
 COPY . ./
 RUN ./gradlew clean build
-RUN cp ./build/libs/sbm-query-ws-0.0.0.jar application.jar
+RUN cp ./backend/build/libs/backend-1.0.0.jar application.jar
 RUN java -Djarmode=layertools -jar application.jar extract
 
 FROM eclipse-temurin:21-jdk-alpine

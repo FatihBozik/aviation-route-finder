@@ -24,7 +24,7 @@ spring:
       stop:
         command: down
         timeout: 10s
-      file: docker-compose.yml
+      file: docker-compose.dev.yml
   cache:
     type: redis
   data:

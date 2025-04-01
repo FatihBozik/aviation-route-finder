@@ -203,7 +203,7 @@ const RouteSearch = () => {
                                                     </Form.Group>
                                                 </Col>
 
-                                                <Col md={1} className="d-flex align-items-end">
+                                                <Col md={2} className="d-flex align-items-end">
                                                     <Button
                                                         variant="primary"
                                                         type="submit"
