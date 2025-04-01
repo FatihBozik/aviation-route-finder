@@ -25,6 +25,12 @@ spring:
         command: down
         timeout: 10s
       file: docker-compose.yml
+  cache:
+    type: redis
+  data:
+    redis:
+      host: localhost
+      port: 6379
 
 springdoc:
   api-docs:

@@ -7,3 +7,14 @@ services:
       POSTGRES_PASSWORD: password
       POSTGRES_USER: aviation
       POSTGRES_DB: aviation
+
+  redis:
+    image: redis:7.2
+    ports:
+      - "6379:6379"
+    command: redis-server --save 20 1 --loglevel warning
+    volumes:
+      - redis-data:/data
+
+volumes:
+  redis-data:

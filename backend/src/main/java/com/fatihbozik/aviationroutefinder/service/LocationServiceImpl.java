@@ -6,6 +6,10 @@ import com.fatihbozik.aviationroutefinder.persistence.LocationEntity;
 import com.fatihbozik.aviationroutefinder.repository.LocationRepository;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.CachePut;
+import org.springframework.cache.annotation.Cacheable;
+import org.springframework.cache.annotation.Caching;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -19,6 +23,7 @@ public class LocationServiceImpl implements LocationService {
 
     @Override
     @Transactional(readOnly = true)
+    @Cacheable(value = "locations", key = "'all'")
     public List<Location> getAll() {
         final List<LocationEntity> locationEntities = locationRepository.findAll();
         return locationMapper.toDomains(locationEntities);
@@ -26,6 +31,10 @@ public class LocationServiceImpl implements LocationService {
 
     @Override
     @Transactional
+    @Caching(
+            evict = {@CacheEvict(value = "locations", key = "'all'")},
+            put = {@CachePut(value = "locations", key = "#result.id")}
+    )
     public Location create(Location location) {
         final LocationEntity entity = locationMapper.toEntity(location);
         final LocationEntity savedEntity = locationRepository.save(entity);
@@ -34,6 +43,13 @@ public class LocationServiceImpl implements LocationService {
 
     @Override
     @Transactional
+    @Caching(
+            evict = {
+                    @CacheEvict(value = "locations", key = "'all'"),
+                    @CacheEvict(value = "routes", allEntries = true)
+            },
+            put = {@CachePut(value = "locations", key = "#id")}
+    )
     public Location update(Long id, Location newData) {
         final LocationEntity entity = locationRepository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException("Location not found with id: " + id));
@@ -44,6 +60,7 @@ public class LocationServiceImpl implements LocationService {
 
     @Override
     @Transactional(readOnly = true)
+    @Cacheable(value = "locations", key = "#id")
     public Location get(Long id) {
         return locationRepository.findById(id)
                 .map(locationMapper::toDomain)
@@ -52,6 +69,11 @@ public class LocationServiceImpl implements LocationService {
 
     @Override
     @Transactional
+    @Caching(evict = {
+            @CacheEvict(value = "locations", key = "#locationId"),
+            @CacheEvict(value = "locations", key = "'all'"),
+            @CacheEvict(value = "routes", allEntries = true)
+    })
     public void delete(Long locationId) {
         if (!locationRepository.existsById(locationId)) {
             throw new EntityNotFoundException("Location not found with id: " + locationId);

@@ -10,6 +10,7 @@ import com.fatihbozik.aviationroutefinder.repository.LocationRepository;
 import com.fatihbozik.aviationroutefinder.repository.TransportationRepository;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
@@ -23,6 +24,7 @@ public class RouteServiceImpl implements RouteService {
     private final TransportationMapper transportationMapper;
 
     @Override
+    @Cacheable(value = "routes", key = "'route_' + #originCode + '_' + #destinationCode + '_' + #day")
     public List<Route> calculateRoutes(String originCode, String destinationCode, int day) {
         final LocationEntity origin = locationRepository.findByCode(originCode)
                 .orElseThrow(() -> new EntityNotFoundException("Origin Location not found: " + originCode));

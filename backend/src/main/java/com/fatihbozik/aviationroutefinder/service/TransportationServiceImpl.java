@@ -8,6 +8,10 @@ import com.fatihbozik.aviationroutefinder.repository.LocationRepository;
 import com.fatihbozik.aviationroutefinder.repository.TransportationRepository;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.CachePut;
+import org.springframework.cache.annotation.Cacheable;
+import org.springframework.cache.annotation.Caching;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -22,6 +26,7 @@ public class TransportationServiceImpl implements TransportationService {
 
     @Override
     @Transactional(readOnly = true)
+    @Cacheable(value = "transportations", key = "'all'")
     public List<Transportation> getAll() {
         final List<TransportationEntity> transportationEntities = transportationRepository.findAll();
         return transportationMapper.toDomains(transportationEntities);
@@ -29,6 +34,13 @@ public class TransportationServiceImpl implements TransportationService {
 
     @Override
     @Transactional
+    @Caching(
+            evict = {
+                    @CacheEvict(value = "transportations", key = "'all'"),
+                    @CacheEvict(value = "routes", allEntries = true)
+            },
+            put = {@CachePut(value = "transportations", key = "#result.id")}
+    )
     public Transportation create(Transportation transportation) {
         final TransportationEntity entity = transportationMapper.toEntity(transportation);
         final TransportationEntity savedEntity = transportationRepository.save(entity);
@@ -37,6 +49,7 @@ public class TransportationServiceImpl implements TransportationService {
 
     @Override
     @Transactional(readOnly = true)
+    @Cacheable(value = "transportations", key = "#id")
     public Transportation get(Long id) {
         return transportationRepository.findById(id)
                 .map(transportationMapper::toDomain)
@@ -45,6 +58,13 @@ public class TransportationServiceImpl implements TransportationService {
 
     @Override
     @Transactional
+    @Caching(
+            evict = {
+                    @CacheEvict(value = "transportations", key = "'all'"),
+                    @CacheEvict(value = "routes", allEntries = true)
+            },
+            put = { @CachePut(value = "transportations", key = "#id") }
+    )
     public Transportation update(Long id, Transportation newTransportation) {
         final TransportationEntity entity = getTransportation(id);
         patchEntity(newTransportation, entity);
@@ -54,6 +74,11 @@ public class TransportationServiceImpl implements TransportationService {
 
     @Override
     @Transactional
+    @Caching(evict = {
+            @CacheEvict(value = "transportations", key = "#transportationId"),
+            @CacheEvict(value = "transportations", key = "'all'"),
+            @CacheEvict(value = "routes", allEntries = true)
+    })
     public void delete(Long transportationId) {
         if (!transportationRepository.existsById(transportationId)) {
             throw new EntityNotFoundException("Transportation not found with id: " + transportationId);
